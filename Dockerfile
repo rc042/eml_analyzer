@@ -1,5 +1,9 @@
 # build env
 FROM node:18-buster-slim as build
+RUN apt-get update \
+  && apt-get install -y python3 spamassassin supervisor libmagic-dev build-essential \
+  && apt-get clean  \
+  && rm -rf /var/lib/apt/lists/*
 
 COPY ./frontend /frontend
 WORKDIR /frontend
@@ -10,7 +14,7 @@ RUN npm install && npm run build && rm -rf node_modules
 FROM python:3.9-slim-buster
 
 RUN apt-get update \
-  && apt-get install -y spamassassin supervisor libmagic-dev  \
+  && apt-get install -y python spamassassin supervisor libmagic-dev  \
   && apt-get clean  \
   && rm -rf /var/lib/apt/lists/*
 
